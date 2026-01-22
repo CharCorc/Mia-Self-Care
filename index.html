@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mia Self Care</title>
+
   <style>
     :root{
       --pink: #ffd6e7;
@@ -16,10 +17,15 @@
       --radius: 22px;
     }
 
-    *{ box-sizing:border-box; }
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body{
       margin:0;
-      min-height:100vh;
+      min-height:100svh;
       display:grid;
       place-items:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
@@ -28,7 +34,7 @@
         radial-gradient(1200px 700px at 15% 20%, var(--pink) 0%, transparent 60%),
         radial-gradient(1100px 650px at 85% 25%, var(--blue) 0%, transparent 60%),
         linear-gradient(135deg, #fff 0%, #f7fbff 100%);
-      padding:24px;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
     }
 
     .app{
@@ -44,17 +50,17 @@
     header{
       padding:22px 22px 14px;
       background: linear-gradient(90deg, var(--pink2), var(--blue2));
-      color:#1f1f1f;
     }
+
     header h1{
       margin:0;
       font-size: 1.25rem;
-      letter-spacing:.2px;
     }
+
     header p{
       margin:6px 0 0;
-      opacity:.9;
       font-size:.95rem;
+      opacity:.9;
     }
 
     .content{
@@ -66,23 +72,26 @@
       gap:8px;
       margin-bottom:18px;
     }
+
     .dot{
       height:10px;
       width:10px;
       border-radius:999px;
       background: rgba(0,0,0,.12);
     }
+
     .dot.active{
       background: linear-gradient(180deg, var(--pink2), var(--blue2));
       box-shadow: 0 0 0 3px rgba(255,185,214,.35);
     }
+
     .dot.done{
       background: rgba(0,0,0,.22);
     }
 
     .card{
       border-radius: var(--radius);
-      background: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.9);
       border: 1px solid rgba(0,0,0,.06);
       padding:18px;
     }
@@ -101,125 +110,119 @@
       border: 1px solid rgba(0,0,0,.06);
       display:none;
     }
-    .message.show{ display:block; }
+
+    .message.show{
+      display:block;
+    }
 
     .btnRow{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
-      margin-top: 6px;
     }
+
     button{
       border:0;
-      border-radius: 999px;
-      padding: 12px 16px;
-      font-size: 1rem;
+      border-radius:999px;
+      padding:12px 16px;
+      font-size:1rem;
       cursor:pointer;
-      transition: transform .05s ease, filter .2s ease, box-shadow .2s ease;
-      user-select:none;
     }
-    button:active{ transform: translateY(1px); }
 
     .yes{
       background: linear-gradient(90deg, var(--blue2), var(--pink2));
-      color:#111;
-      box-shadow: 0 10px 22px rgba(0,0,0,.10);
     }
+
     .no{
       background: rgba(0,0,0,.07);
-      color:#222;
       border: 1px solid rgba(0,0,0,.08);
     }
+
     .restart{
       background: rgba(0,0,0,.10);
       border: 1px solid rgba(0,0,0,.10);
+      display:none;
     }
 
     .footer{
-      padding: 14px 22px 20px;
+      padding:14px 22px 20px;
       display:flex;
       justify-content:space-between;
-      align-items:center;
       gap:12px;
-      opacity:.8;
       font-size:.9rem;
+      opacity:.8;
     }
 
     .pill{
-      padding: 6px 10px;
-      border-radius: 999px;
+      padding:6px 10px;
+      border-radius:999px;
       background: rgba(255,255,255,.65);
       border: 1px solid rgba(0,0,0,.06);
-      white-space:nowrap;
     }
 
-    @media (max-width:420px){
-      .question{ font-size: 1.2rem; }
-      button{ width:100%; }
-      .footer{ flex-direction:column; align-items:flex-start; }
+    @media (max-width:520px){
+      .app{
+        backdrop-filter:none;
+        background: rgba(255,255,255,.96);
+      }
+
+      .content, .card{
+        padding:16px;
+      }
+
+      .question{
+        font-size:1.2rem;
+      }
+
+      button{
+        width:100%;
+      }
+
+      .footer{
+        flex-direction:column;
+        align-items:flex-start;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="app" role="application" aria-label="Mia Self Care">
+  <div class="app">
     <header>
       <h1>Mia Self Care</h1>
-      <p>A little mini check-in quiz :).</p>
+      <p>A tiny check-in quiz.</p>
     </header>
 
     <div class="content">
-      <div class="progress" id="progress" aria-label="progress"></div>
+      <div class="progress" id="progress"></div>
 
       <div class="card">
         <p class="question" id="questionText"></p>
-        <div class="message" id="messageBox" role="status" aria-live="polite"></div>
+        <div class="message" id="messageBox"></div>
 
-        <div class="btnRow" id="btnRow">
-          <button class="yes" id="yesBtn" type="button">Yes</button>
-          <button class="no" id="noBtn" type="button">No</button>
-          <button class="restart" id="restartBtn" type="button" style="display:none;">Start over</button>
+        <div class="btnRow">
+          <button class="yes" id="yesBtn">Yes</button>
+          <button class="no" id="noBtn">No</button>
+          <button class="restart" id="restartBtn">Start over</button>
         </div>
       </div>
     </div>
 
     <div class="footer">
-      <span class="pill" id="stepLabel">Step 1 of 5</span>
-      <span class="pill" id="note">good vibes only ✿</span>
+      <span class="pill" id="stepLabel"></span>
+      <span class="pill">Pastel vibes only ✿</span>
     </div>
   </div>
 
   <script>
-    // Mia Self Care flow:
-    // Q1-3: if "No", show message and repeat same question until "Yes"
-    // Q4: if "No", show suggestion then proceed
-    // Q5: if "No", show message then go to restart page (start-over screen)
+    const PAUSE_MS = 2500;
 
     const steps = [
-      {
-        question: "Have you eaten?",
-        noMessage: "GO EAT",
-        noBehavior: "repeat" // repeat until yes
-      },
-      {
-        question: "Have you drank water?",
-        noMessage: "GO DRINK WATER",
-        noBehavior: "repeat"
-      },
-      {
-        question: "Have you taken your meds?",
-        noMessage: "GO TAKE YOUR MEDS",
-        noBehavior: "repeat"
-      },
-      {
-        question: "Have you had the normal amount of caffeine?",
-        noMessage: "maybe have some caffeine if you want",
-        noBehavior: "continue" // show message, then move on
-      },
-      {
-        question: "Have you slept enough?",
-        noMessage: "You should really sleep more. You probably can't do that right now, but sleep tonight.",
-        noBehavior: "restartPage" // show message then go to restart screen
-      }
+      { question: "Have you eaten?", noMessage: "GO EAT", noBehavior: "repeat" },
+      { question: "Have you drank water?", noMessage: "GO DRINK WATER", noBehavior: "repeat" },
+      { question: "Have you taken your meds?", noMessage: "GO TAKE YOUR MEDS", noBehavior: "repeat" },
+      { question: "Have you had the normal amount of caffeine?", noMessage: "maybe have some caffeine if you want", noBehavior: "continue" },
+      { question: "Have you slept enough?", noMessage: "You should really sleep more. You probably can't do that right now, but sleep tonight.", noBehavior: "restartPage" }
     ];
 
     const questionText = document.getElementById("questionText");
@@ -231,125 +234,79 @@
     const progress = document.getElementById("progress");
 
     let idx = 0;
-    let mode = "quiz"; // "quiz" | "restart"
-    const PAUSE_MS = 2500;
+    let mode = "quiz";
 
-
-    function renderDots() {
+    function renderDots(){
       progress.innerHTML = "";
-      for (let i = 0; i < steps.length; i++) {
-        const dot = document.createElement("div");
-        dot.className = "dot";
-        if (mode === "restart") {
-          // all "done" for visual calm
-          dot.classList.add("done");
-        } else if (i < idx) {
-          dot.classList.add("done");
-        } else if (i === idx) {
-          dot.classList.add("active");
-        }
-        progress.appendChild(dot);
-      }
+      steps.forEach((_, i) => {
+        const d = document.createElement("div");
+        d.className = "dot";
+        if (mode === "restart") d.classList.add("done");
+        else if (i < idx) d.classList.add("done");
+        else if (i === idx) d.classList.add("active");
+        progress.appendChild(d);
+      });
     }
 
-    function showMessage(text) {
-      messageBox.textContent = text;
-      messageBox.classList.add("show");
-    }
-
-    function clearMessage() {
-      messageBox.textContent = "";
+    function renderQuestion(){
+      mode = "quiz";
+      renderDots();
+      questionText.textContent = steps[idx].question;
+      stepLabel.textContent = `Step ${idx + 1} of ${steps.length}`;
       messageBox.classList.remove("show");
+      yesBtn.style.display = "inline-block";
+      noBtn.style.display = "inline-block";
+      restartBtn.style.display = "none";
     }
 
-    function setRestartScreen(extraMessage) {
+    function setRestart(message){
       mode = "restart";
       renderDots();
-
-      questionText.textContent = "Quiz complete (for now). Want to start the check-in over?";
-      if (extraMessage) showMessage(extraMessage);
-
+      questionText.textContent = "Quiz complete (for now). Want to start again?";
+      messageBox.textContent = message;
+      messageBox.classList.add("show");
       yesBtn.style.display = "none";
       noBtn.style.display = "none";
       restartBtn.style.display = "inline-block";
       stepLabel.textContent = "Restart";
     }
 
-    function renderQuestion() {
-      mode = "quiz";
-      renderDots();
-
-      const step = steps[idx];
-      questionText.textContent = step.question;
-      stepLabel.textContent = `Step ${idx + 1} of ${steps.length}`;
-
-      yesBtn.style.display = "inline-block";
-      noBtn.style.display = "inline-block";
-      restartBtn.style.display = "none";
-
-      clearMessage();
-    }
-
-    function onYes() {
-      if (mode === "restart") return;
-
-      clearMessage();
-
-      idx += 1;
+    yesBtn.onclick = () => {
+      if (mode !== "quiz") return;
+      idx++;
       if (idx >= steps.length) {
-        // If they said "Yes" to sleep enough, finish and offer restart.
-        setRestartScreen("Proud of you 💗💙");
-        return;
+        setRestart("Proud of you. Tiny check-ins add up 💗💙");
+      } else {
+        renderQuestion();
       }
-      renderQuestion();
-    }
+    };
 
-    function onNo() {
-      if (mode === "restart") return;
-
+    noBtn.onclick = () => {
+      if (mode !== "quiz") return;
       const step = steps[idx];
-      showMessage(step.noMessage);
+      messageBox.textContent = step.noMessage;
+      messageBox.classList.add("show");
 
-      if (step.noBehavior === "repeat") {
-        // Stay on same question until yes.
-        return;
-      }
+      if (step.noBehavior === "repeat") return;
 
-      if (step.noBehavior === "continue") {
-        // Move on after showing the message.
-        idx += 1;
-        if (idx >= steps.length) {
-          setRestartScreen("Proud of you 💗💙");
-          return;
-        }
-showMessage(step.noMessage);
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          if (step.noBehavior === "continue") {
+            idx++;
+            renderQuestion();
+          } else {
+            setRestart(step.noMessage);
+          }
+        }, PAUSE_MS);
+      });
+    };
 
-requestAnimationFrame(() => {
-  setTimeout(() => {
-    setRestartScreen(step.noMessage);
-  }, PAUSE_MS);
-});
-
-showMessage(step.noMessage);
-
-requestAnimationFrame(() => {
-  setTimeout(() => {
-    setRestartScreen(step.noMessage);
-  }, PAUSE_MS);
-});
-
-
-    function restart() {
+    restartBtn.onclick = () => {
       idx = 0;
       mode = "quiz";
       renderQuestion();
-    }
+    };
 
-    yesBtn.addEventListener("click", onYes);
-    noBtn.addEventListener("click", onNo);
-    restartBtn.addEventListener("click", restart);
-
-    // initial render
     renderQuestion();
   </script>
 </body>
