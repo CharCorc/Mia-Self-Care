@@ -232,6 +232,8 @@
 
     let idx = 0;
     let mode = "quiz"; // "quiz" | "restart"
+    const PAUSE_MS = 2500;
+
 
     function renderDots() {
       progress.innerHTML = "";
@@ -320,21 +322,22 @@
           setRestartScreen("Proud of you 💗💙");
           return;
         }
-        // Keep the message visible briefly, then switch question.
-        setTimeout(() => {
-          renderQuestion();
-        }, 2500);
-        return;
-      }
+showMessage(step.noMessage);
 
-      if (step.noBehavior === "restartPage") {
-        // Show message and go to restart screen (but do not loop the question).
-        setTimeout(() => {
-          setRestartScreen(step.noMessage);
-        }, 2500);
-        return;
-      }
-    }
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    setRestartScreen(step.noMessage);
+  }, PAUSE_MS);
+});
+
+showMessage(step.noMessage);
+
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    setRestartScreen(step.noMessage);
+  }, PAUSE_MS);
+});
+
 
     function restart() {
       idx = 0;
