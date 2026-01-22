@@ -323,7 +323,7 @@
         // Keep the message visible briefly, then switch question.
         setTimeout(() => {
           renderQuestion();
-        }, 1000);
+        }, 2500);
         return;
       }
 
@@ -331,7 +331,7 @@
         // Show message and go to restart screen (but do not loop the question).
         setTimeout(() => {
           setRestartScreen(step.noMessage);
-        }, 1000);
+        }, 2500);
         return;
       }
     }
